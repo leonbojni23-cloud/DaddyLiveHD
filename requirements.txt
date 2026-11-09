@@ -3,3 +3,5 @@ curl-cffi==0.13.0
 httpx[http2]==0.28.1
 python-dateutil==2.9.0
 fastapi==0.118.0
+# Keep SQLModel compatible with Reflex 0.8.13's Pydantic v1 compatibility shim.
+sqlmodel==0.0.24
