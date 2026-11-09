@@ -3,14 +3,17 @@ ARG PROXY_CONTENT=TRUE
 ARG SOCKS5
 ARG API_URL
 
-# Build on the Python version documented and tested by this project.
 FROM python:3.12-slim AS builder
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 WORKDIR /app
-RUN mkdir -p /app/.web && python -m venv /app/.venv
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends unzip curl ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /app/.web \
+    && python -m venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 
 COPY requirements.txt ./
@@ -20,7 +23,6 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel \
 COPY rxconfig.py ./
 COPY . .
 
-# Initialize only after the application package has been copied into the image.
 RUN reflex init
 
 ARG PORT API_URL PROXY_CONTENT SOCKS5
