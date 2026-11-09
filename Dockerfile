@@ -18,9 +18,10 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel \
     && pip install --no-cache-dir -r requirements.txt
 
 COPY rxconfig.py ./
-RUN reflex init
-
 COPY . .
+
+# Initialize only after the application package has been copied into the image.
+RUN reflex init
 
 ARG PORT API_URL PROXY_CONTENT SOCKS5
 RUN REFLEX_API_URL=${API_URL:-http://localhost:${PORT:-3000}} \
